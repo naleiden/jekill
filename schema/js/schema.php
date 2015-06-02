@@ -2,6 +2,7 @@
 
 require_once("../../base/settings.php");
 
+header("Content-Type: text/javascript");
 ?>
 
 function startSWFUpload () {

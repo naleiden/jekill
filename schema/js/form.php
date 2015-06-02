@@ -3,9 +3,6 @@
 require_once("../../base/settings.php");
 
 header("Content-type: text/javascript");
-
-include("jquery-ui/js/jquery-ui.min.js");
-
 ?>
 
 var JEKILL_ROOT = "<?php echo $SETTINGS['JEKILL_ROOT']; ?>";

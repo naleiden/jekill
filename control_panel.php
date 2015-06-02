@@ -1,7 +1,7 @@
 <?php
 
-include("base/ensure_secure.php");
-include("authentication.php");
+// include("base/ensure_secure.php");
+// include("authentication.php");
 
 require_once("base/define.php");
 require_once("base/HTML.php");

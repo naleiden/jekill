@@ -16,14 +16,12 @@ $function = isset($_REQUEST['func']) ? $_REQUEST['func'] : "browse";
 $style = array(/* "schema/css/control_panel_style.php", */ "schema/js/jquery-ui/css/ui-lightness/jquery-ui-1.8.13.custom.css", "schema/css/color_selector.css", "schema/css/control_panel.php", "schema/css/calendar.css", "schema/css/form.css.php", "schema/css/util.css", "kernel/css/kernel_style.css");
 $html = new HTML("{$SETTINGS['COMPANY_NAME']}: Control Panel", $style);
 
-$html->import("swf/SWFUpload/swfupload.js");
-$html->import("schema/js/jquery.js");
-$html->import("schema/js/jquery-ui/js/jquery-1.5.1.min.js");
+// $html->import("swf/SWFUpload/swfupload.js");
+$html->import("node_modules/jquery/dist/jquery.min.js");
 $html->import("schema/js/color.js");
 $html->import("schema/js/form.php");
 $html->import("schema/js/schema.php");
 $html->import("schema/js/utils.js");
-$html->import("schema/js/jquery.corner.js");
 $html->import("schema/js/md5/md5.js");
 
 
@@ -43,10 +41,6 @@ $control_panel_div = SchemaManager::control_panel($table, $function, $entity_ID,
 $frame_div = $html->div()->add($control_panel_div);
 
 $html->add($frame_div);
-
-$round_script = $html->script()->content("$(\".menu_tab\").corner(\"top 5px\"); $(\"#control_panel_body\").corner(\"bottom 7px\")");
-
-$html->script->add($round_script);
 
 echo $html->html();
 

@@ -1,0 +1,24 @@
+{
+  "name": "jekill",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naleiden/jekill"
+  },
+  "author": "Draw It To Know It",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naleiden/jekill/issues"
+  },
+  "homepage": "https://github.com/naleiden/jekill",
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "jquery-ui": "^1.10.5",
+    "tinymce": "^4.1.10"
+  }
+}

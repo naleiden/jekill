@@ -1,7 +1,5 @@
 <?php
 
-// include("authentication.php");
-
 require_once("base/define.php");
 require_once("base/HTML.php");
 require_once("base/mysql_connection.php");
@@ -12,7 +10,7 @@ $table = $_REQUEST['table'];
 $entity_ID = $_REQUEST['id'];
 $function = isset($_REQUEST['func']) ? $_REQUEST['func'] : "browse";
 
-$style = array("schema/css/color_selector.css", "schema/css/calendar.css", "schema/css/form.css", "schema/css/util.css", "kernel/css/kernel_style.css");
+$style = array("schema/css/color_selector.css", "schema/css/calendar.css", "schema/css/form.css.php",/* "schema/css/util.css",*/ "kernel/css/kernel_style.css");
 $html = new HTML("{$SETTINGS['COMPANY_NAME']}: Control Panel", $style);
 
 $html->import("schema/js/jquery.js");

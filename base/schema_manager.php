@@ -2656,10 +2656,10 @@ class SchemaManager {
 			$mode = "\"textareas\",";
 		else $mode = "\"exact\", elements: \"{$textarea_IDs}\",";
 
-		$html->import("schema/js/tiny_mce/tiny_mce.js");
+		$html->import("node_modules/tinymce/tinymce.min.js"); // schema/js/tiny_mce/tiny_mce.js");
 		$tinyMCE_init = $html->script()->content("tinyMCE.init({ 
 	mode : {$mode}
-	theme: \"advanced\",
+	theme: \"modern\",
 	plugins: \"paste,fullscreen,spellchecker\",
 	theme_advanced_buttons1 : \"|,bold,italic,underline,|,styleselect,fontselect,fontsizeselect,forecolor,backcolor\",
 	theme_advanced_buttons2 : \"cut,copy,paste,pastetext,pasteword,|,link,unlink,bullist,numlist,|,outdent,indent,|,undo,redo,|,removeformat,code,fullscreen\",

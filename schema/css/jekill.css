@@ -1,0 +1,34 @@
+
+iframe {
+	overflow: scroll;
+}
+
+.jcopy_editor, .mceEditor {
+	height: 150px;
+	z-index: 999999;
+}
+
+.jeditable {
+	background-color: #FFFFCC;
+	border-bottom: dotted #FF9900 1px;
+	border-top: dotted #FF9900 1px;
+	color: #333333;
+	cursor: pointer;
+}
+
+.jtext input {
+	font-size: 11px;
+	z-index: 999999;
+}
+
+.jdynamic {
+	background-color: #DDCCFF;
+	border-bottom: dotted #CC00FF 1px;
+	border-top: dotted #CC00FF 1px;
+	cursor: pointer;
+}
+
+.jimage {
+	border: dotted #FF9900 3px;
+	cursor: pointer;
+}

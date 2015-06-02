@@ -1,0 +1,340 @@
+
+a img {
+	border: none;
+}
+
+body {
+	font-family: Arial;
+	font-size: 12px;
+}
+
+body.login {
+	margin: 0px;
+	padding: 0px;
+	background-color: #0066CC;
+	text-align: center;
+}
+
+.center {
+	text-align: center;
+}
+
+.clear {
+	clear: both;
+}
+
+.control_panel_frame {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1200px;
+}
+
+#control_panel_body {
+	background-color: #0099CC;
+	clear: left;
+	/* border: solid #333333 1px; */
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+	width: 1200px;
+}
+
+#control_panel_content {
+	padding: 10px;
+}
+
+.copy_input {
+	height: 375px;
+	width: 600px;
+}
+
+
+.footer {
+	margin-top: 30px;
+}
+
+.header, .footer {
+	font-size: 16px;
+	font-weight: bold;
+	margin-left: 15px;
+}
+
+.header {
+	margin-bottom: 30px;
+}
+
+.header a, .footer a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.header a:hover, .footer a:hover {
+	text-decoration: underline;
+}
+
+img.preview {
+	border: solid #333333 1px;
+}
+
+.input, .name {
+	width: 200px;
+}
+
+input.login {
+	width: 150px;
+}
+
+.login_frame {
+	background-color: #FFFFFF;
+	/* border: solid #666666 1px; */
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 100px;
+	padding: 40px;
+	padding-bottom: 60px;
+	width: 350px;
+}
+
+.menubar_carrier {
+	position: relative;
+	top: 1px;
+	width: 2500px;
+}
+
+.menubar {
+	/* background: url("../images/menu_background.jpg"); */
+	overflow: hidden;
+/*	margin-left: 20px; */
+	position: relative;
+	width: 1200px;
+}
+
+.menubar_container {
+	float: left;
+	width: 1200px;
+}
+
+.menubar_control {
+	float: left;
+}
+
+.menubar_control img {
+	margin-left: 5px;
+}
+
+.menu_tab {
+	background-color: #DDDDDD;
+	/* border: solid #333333 1px; */
+	font-size: 8pt;
+	float: left;
+	margin-right: 3px;
+	padding-top: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 2px;
+	text-align: center;
+}
+
+.menu_tab a {
+	color: #0099CC;
+	font-size: 8pt;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.menu_tab_selected {
+	/* Must be same color as control_panel_body background-color */
+	background-color: #0099CC ;
+	/* border-bottom: solid #82BA41 1px; */
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+.menu_tab_selected a {
+	color: #FFFFFF;
+}
+
+.notice {
+	/* text-decoration: underline; */
+	font-style: italic;
+}
+
+.page_header {
+
+}
+
+.page_body {
+
+}
+
+.page_footer {
+	font-size: 9pt;
+	text-align: center;
+}
+
+.rows {
+	border: solid #333333 1px;
+	border-bottom: none;
+}
+
+.row {
+	border-bottom: solid #333333 1px;
+	padding-left: 5px;
+}
+
+.row a {
+	color: #FFFFFF;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.row a:hover {
+	text-decoration: underline;
+}
+
+.row a:visited {
+	color: #FFFFFF;
+}
+
+.row_even {
+	background-color: #CCCCCC;
+	padding-bottom: 3px;
+	padding-top: 3px;
+}
+
+.row_odd {
+	background-color: #AAAAAA;
+	padding-bottom: 3px;
+	padding-top: 3px;
+}
+
+.row_field_header {
+	font-weight: bold;
+	/* text-align: center; */
+}
+
+.row_field_header a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.row_field_header a:hover {
+	text-decoration: underline;
+}
+
+.row_field, .row_field_header {
+	float: left;
+}
+
+.right {
+	text-align: right;
+}
+
+#search {
+	float: right;
+}
+
+#search input, #search select {
+	margin-left: 5px;
+}
+
+.search_current_result_page {
+	background-color: #E2B975;
+	border: solid #333333 1px;
+	float: right;
+	margin: 2px;
+	padding: 3px;
+}
+
+.search_result_overview {
+	text-align: right;
+}
+
+.search_result_page {
+	float: right;
+	margin-top: 2px;
+	padding: 3px;
+}
+
+.search_result_page a {
+	color: #FFFFFF;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.search_result_page a:hover {
+	text-decoration: underline;
+}
+
+.sentence {
+	width: 300px;
+}
+
+.submenu {
+	background-color: #0099CC;
+	border-bottom: solid #C97030 1px;
+	padding: 5px;
+	padding-bottom: 0px;
+}
+
+.submenu .menu_tab_selected {
+	background-color: #C97030;
+}
+
+#subrecord_chooser {
+	border: solid #333333 1px;
+	height: 300px;
+	margin-bottom: 5px;
+	overflow: auto;
+}
+
+.subrecord_container {
+	/* border: solid #666666 1px; */
+	/* height: 0px; */
+	display: none;
+	overflow: hidden;
+}
+
+.subrecord_control {
+	float: right;
+	cursor: pointer;
+	margin-left: 5px;
+}
+
+.subrecord_number {
+	/* border-bottom: solid #666666 1px; */
+	padding: 10px;
+}
+
+.subrecord_number {
+	border: solid #FFFFFF 2px;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 2px;
+	padding: 5px;
+	position: absolute;
+}
+
+.subtable_record {
+	clear: left;
+	padding: 5px;
+}
+
+.subheader {
+	margin-top: 15px;
+}
+
+
+table {
+	font-size: 12px;
+	margin-left: auto;
+	margin-right: auto;
+	/* width: 100% */
+}
+
+.transparent {
+	opacity: 0.0;
+	-moz-opacity: 0.0;
+	filter: alpha(opacity=0);
+}

@@ -1,0 +1,60 @@
+
+.color {
+	cursor: pointer;
+	height: 2.8px;
+	width: 20px;
+}
+
+#color_controls {
+	float: left;
+	margin-left: 10px;
+}
+
+#color_palette {
+	height: 256px;
+	width: 256px;
+}
+
+#color_palette div {
+	cursor: pointer;
+	float: left;
+	height: 16px;
+	width: 16px;
+}
+
+#color_palette div.selected {
+	border: solid #FFFFFF 1px;
+	height: 14px;
+	width: 14px;
+}
+
+#color_selector {
+	border: solid #000000 1px;
+}
+
+#color_viewer {
+	border: solid #000000 1px;
+}
+
+#color_viewer, #hex_preview {
+	height: 25px;
+	width: 50px;
+}
+
+#hex_preview {
+	font-size: 13px;
+	text-transform: uppercase;
+}
+
+#hue_selector {
+	float: left;
+	margin-left: 10px;
+}
+
+.grayscale {
+	width: 16px;
+}
+
+#palette_container {
+	float: left;
+}

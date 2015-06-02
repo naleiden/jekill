@@ -1,0 +1,26 @@
+.search_result_overview {
+	text-align: right;
+}
+
+.search_result_page {
+	float: right;
+	margin-top: 2px;
+	padding: 3px;
+}
+
+.search_result_page a {
+/* 	color: #FFFFFF; */
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.search_result_page a:hover {
+	text-decoration: underline;
+}
+
+.search_current_result_page {
+	color: #FFFFFF;
+	font-weight: bold;
+	float: right;
+	padding: 5px;
+}

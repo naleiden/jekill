@@ -1,0 +1,110 @@
+/**************/
+/*            */
+/*  Calendar  */
+/*            */
+/**************/
+
+/* NOTE: Percentage width / height work perfectly in Firefox, but not in IE. */
+
+.date_input {
+	border-width: 0;
+	text-align: right;
+	width: 20px;
+}
+
+.date_input_extended {
+	border-width: 0;
+	width: 40px;
+}
+
+.day, .day_top_row, .nonmonth_day {
+	border-right: solid #000000 1px;
+	border-bottom: solid #000000 1px;
+	color: #999999;
+	font-size: 0.75em;
+	float: left;
+	/* height: 100%; */
+	/* padding: 2px; */
+	text-align: left;
+}
+
+.day {
+	background-color: #FFFFFF;
+	cursor: pointer;
+	/* height: 100%; */
+	/* width: 12%; */
+}
+
+.day_first_column {
+	border-left: solid #000000 1px;
+}
+
+.day_top_row {
+	border-top: solid #000000 1px;
+}
+
+.nonmonth_day {
+	background-color: #333333;
+	float: left;
+	/* height: 100%; */
+	/* width: 12%; */
+}
+
+.selected_day {
+	background-color: #FFFF99;
+	float: left;
+	/* border: solid #333333 1px; */
+}
+
+.day_header_row {
+	clear: left;
+	font-size: 0.9em;
+}
+
+.day_column_header {
+	float: left;
+	font-size: 9pt;
+	/*
+	padding-left: 2px;
+	padding-right: 2px;
+	*/
+	text-align: center;
+	/* width: 12%; */
+}
+
+.current_month {
+	/* height: 100%; */
+}
+
+.current_month_name {
+	font-size: 1.1em;
+	font-weight: bold;
+	text-align: center;
+}
+
+.month_container {
+	background-color: #CADDE3;
+	border: 1px solid #087592;
+	/* height: 100%; */
+	/* padding: 5px; */
+	/* width: 100%; */
+}
+
+.month {
+/*
+	height: 100%;
+	width: 100%;
+*/
+}
+
+.month_footer {
+	clear: left;
+}
+
+.week {
+	clear: left;
+/*
+	height: 14%;
+	width: 100%;
+*/
+}

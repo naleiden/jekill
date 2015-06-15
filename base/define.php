@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(0);
+
 /* spl_autoload_register(function ($classname) {
 	$classname = preg_replace("/([a-z]{1})([A-Z]{1})/", "$1_$2", $classname);
 

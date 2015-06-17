@@ -1041,6 +1041,7 @@ $SCHEMA['subject'] = array(
 	TABLE_PARENT => "curriculum",
 	TABLE_ACCESS => ADMINISTRATOR,
 	// RECORD_WHERE => "WHERE curriculum IS NOT NULL",
+	RECORD_LABEL => "subject",
 
 	"subject_group"		=> array("subject_group", LINK, "Subject", LINK_TABLE => "subject_group", LINK_LABEL => "name", SUBTABLE_DEFAULT => "subject_group_ID"),
 	"subject"		=> array("subject", SENTENCE, "Unit Name", REQUIRED),
@@ -1057,6 +1058,7 @@ $SCHEMA['curriculum'] = array(
 	TABLE_LABEL => "Courses",
 	TABLE_PARENT => "materials",
 	TABLE_ACCESS => ADMINISTRATOR,
+	RECORD_LABEL => "name",
 
 	// "division"	=> array("division", SET, "Division", REQUIRED, FIELD_OPTIONS => $DIVISIONS),
 	"name"	=> array("name", NAME, "Course Name", REQUIRED),
@@ -1071,6 +1073,8 @@ $SCHEMA['curriculum'] = array(
 $SCHEMA['subject_group'] = array(
 	TABLE_LABEL => "Subjects",
 	TABLE_PARENT => "curriculum",
+	RECORD_LABEL => "name",
+	TABLE_SORT => "sort_order",
 
 	//"division"	=> array("division", ENUMERATION, "Division", REQUIRED, FIELD_OPTIONS => $DIVISIONS),
 	"curriculum"	=> array("curriculum", LINK, "Course", REQUIRED, LINK_TABLE => "curriculum", LINK_LABEL => "name"),

@@ -21,6 +21,235 @@ class SchemaManager {
 		return $kernel_div;
 	}
 
+	protected function get_map_table_details ($parent_table_name, $field_name) {
+		global $SCHEMA;
+
+		$child_table_name = $SCHEMA[$parent_table_name][$field_name][LINK_TABLE];
+		$map_table = self::get_map_table_name($parent_table_name, $child_table_name, $field_name);
+		$field = $SCHEMA[$parent_table_name][$field_name];
+        $parent_ID_field = (isset($field[LINK_LOCAL_KEY])) ? $field[LINK_LOCAL_KEY] : self::get_table_unique_identifier($parent_table_name);
+        $child_ID_field = (isset($field[LINK_FOREIGN_KEY])) ? $field[LINK_FOREIGN_KEY] : self::get_table_unique_identifier($child_table_name);
+		return array($map_table, $parent_ID_field, $child_ID_field);
+	}
+
+	static function create_relationship ($parent_table_name, $parent_ID, $field_name, $child_ID) {
+		global $SCHEMA, $mysql;
+
+		$TABLE = $SCHEMA[$parent_table_name];
+		$field = $TABLE[$field_name];
+		$child_table_name = $field[LINK_TABLE];
+
+		switch ($field[FIELD_TYPE]) {
+			// TODO: Factor this with similar code in persist()
+			case LINK_N_TO_N:
+				list($map_table, $parent_ID_field, $child_ID_field) = self::get_map_table_details($parent_table_name, $child_table_name);
+				// TODO: Maybe make this not have to be unique later, or use keys to ensure uniqueness.
+				$mysql->write_lock($map_table);
+				$existing = $mysql->count($map_table, "*", sprintf("WHERE {$parent_ID_field} = %d AND {$child_ID_field} = %d", $parent_ID, $child_ID));
+				$query = sprintf("INSERT INTO {$map_table} ({$parent_ID_field}, {$child_ID_field}) VALUES (%d, %d)", $parent_ID, $child_ID);
+				$mysql->query($query);
+				$mysql->unlock();
+				break;
+			case LINK_ONE_TO_N:
+				// The field in the child table that references the parent
+				$reference_field = $field[LINK_FIELD];
+				$child_table_ID_field = self::get_table_unique_identifier($child_table);
+				$query = sprintf("UPDATE {$child_table_name} SET {$reference_field} = %d
+							WHERE {$child_table_ID_field} = %d",
+							$parent_ID,
+							$child_ID
+						);
+				break;
+		}
+	}
+
+	static function destroy_relationship ($parent_table, $parent_ID, $field_name, $child_ID) {
+		global $SCHEMA;
+
+		$TABLE = $SCHEMA[$parent_table];
+		$field = $TABLE[$field_name];
+
+		switch ($field[FIELD_TYPE]) {
+                        // TODO: Factor this with similar code in persist()
+                        case LINK_N_TO_N:
+                                list($map_table, $parent_ID_field, $child_ID_field) = self::get_map_table_details($parent_table_name, $child_table_name);
+                                // TODO: Maybe make this not have to be unique later, or use keys to ensure uniqueness.
+                                $mysql->write_lock($map_table);
+                                $query = sprintf("DELETE FROM {$map_table} WHERE {$parent_ID_field} = %d AND {$child_ID_field} = %d", $parent_ID, $child_ID);
+                                $mysql->query($query);
+                                $mysql->unlock();
+                                break;
+                        case LINK_ONE_TO_N:
+                                // The field in the child table that references the parent
+                                $reference_field = $field[LINK_FIELD];
+                                $child_table_ID_field = self::get_table_unique_identifier($child_table);
+                                $query = sprintf("UPDATE {$child_table_name} SET {$reference_field} TO NULL
+                                                        WHERE {$child_table_ID_field} = %d AND {$reference_field} = %d",
+                                                        $child_ID,
+							$parent_ID
+                                                );
+                                break;
+                }
+
+	}
+
+	static function parse_data_schema ($schema) {
+		$schema_parts = explode(",", $schema);
+		$schema = array();
+		foreach ($schema_parts AS $part) {
+			if (preg_match("/:/", $part)) {
+				preg_match("/(?P<field>[a-z_]+){(?P<where_field>[a-z_]+):(?P<where_value>[a-z0-9_]+)}/i", $part, $matches);
+				$field = array(
+						"field" => $matches['field'],
+						"where_field" => $matches['where_field'],
+						"where_value" => $matches['where_value']
+					);
+			} else {
+				$field = array("field" => $part);
+			}
+			$schema[] = $field;
+		}
+
+		return $schema;
+	}
+
+	// Follow a heirarchy of a schema via references
+	// [ table_name, field_name, field_name, ... ]
+	static function data ($schema) {
+		global $SCHEMA, $mysql;
+		
+		$schema = self::parse_data_schema($schema);
+		$root_table = $schema[0]['field'];
+		$heirarchy_IDs = array();
+		$fields = array();
+		$joins = array();
+		$where = array();
+		$orders = array();
+		$current_table = $root_table;
+		$current_table_alias = $current_table;
+
+		// Add the fields of the root table
+		$root_table_ID_field = self::get_table_unique_identifier($root_table);
+		$root_table_label = $SCHEMA[$root_table][RECORD_LABEL];
+		$fields[] = "{$root_table}.{$root_table_ID_field}";
+		$fields[] = "{$root_table}.{$root_table_label}";
+		if ($SCHEMA[$root_table][TABLE_SORT]) {
+			$orders[] = "{$root_table}.{$SCHEMA[$root_table][TABLE_SORT]}";
+		}
+		if ($schema[0]['where_field']) {
+			$where[] = "{$schema[0]['where_field']} = '{$schema[0]['where_value']}'";
+		}
+		$heirarchy_IDs[] = array("table" => $root_table, "id" => $root_table_ID_field, "id_alias" => $root_table_ID_field, "label" => $root_table_label, "label_alias" => $root_table_label);
+		for ($i=1; $i<count($schema); $i++) {
+			$current_table_ID_field = self::get_table_unique_identifier($current_table);
+			$field_name = $schema[$i]['field'];
+			$field = $SCHEMA[$current_table][$field_name];
+			$child_table = $field[LINK_TABLE];
+
+			// Create an alias for the child table, in case the table is referenced more than once
+			$child_table_alias = $child_table . "_" . $field_name;
+			$child_table_ID_field = self::get_table_unique_identifier($child_table);
+			$child_label_field = $field[LINK_LABEL];
+
+			if ($schema[$i]['where_field']) {
+				$where[] = "{$child_table_alias}.{$schema[$i]['where_field']} = '{$schema[$i]['where_value']}'";
+			}
+
+			switch ($field[FIELD_TYPE]) {
+				case LINK_N_TO_N:
+					list($map_table, $parent_ID_field, $child_ID_field) = self::get_map_table_details($current_table, $field_name);
+					$joins[] = "LEFT JOIN {$map_table} ON ({$map_table}.{$parent_ID_field} = {$current_table_alias}.{$current_table_ID_field})";
+					$joins[] = "LEFT JOIN {$child_table} AS {$child_table_alias} ON ({$child_table_alias}.{$child_table_ID_field} = {$map_table}.{$child_ID_field})";
+					if (!$field[LINK_MAP_TABLE]) {
+						$orders[] = "{$map_table}.record_num";
+					} else if ($field[LINK_MAP_TABLE] && $field[LINK_MAP_SORT]) {
+						$orders[] = "{$map_table}." . $field[LINK_MAP_SORT];
+					}
+					break;
+				case LINK_ONE_TO_N:
+					$reference_field = $field[LINK_FIELD];
+					$order_field = $field[LINK_SORT];
+					$joins[] = "LEFT JOIN {$child_table} AS {$child_table_alias} ON ({$child_table_alias}.{$reference_field} = {$current_table}.{$current_table_ID_field})";
+					if ($order_field) {
+						$orders[] = "{$child_table_alias}.{$order_field}";
+					}
+					break;
+			}
+			$child_ID_alias = $child_table_ID_field . "_" . $field_name;
+			$child_label_alias = $child_label_field . "_" . $field_name;
+			$heirarchy_IDs[] = array("table" => $child_table, "field" => $field_name, "id" => $child_table_ID_field, "id_alias" => $child_ID_alias, "label" => $child_label_field, "label_alias" => $child_label_alias);
+			$fields[] = "{$child_table_alias}.{$child_table_ID_field} AS {$child_ID_alias}"; 
+			$fields[] = "{$child_table_alias}.{$child_label_field} AS {$child_label_alias}";
+			$current_table = $child_table;
+			$current_table_alias = $child_table_alias;
+		}
+
+		$fields = implode(", ", $fields);
+		$joins = implode("\n", $joins);
+		$where = (count($where)) ? "WHERE " . implode(" AND ", $where) : "";
+		$orders = (count($orders)) ? "ORDER BY " . implode(", ", $orders) : "";
+
+		$query = "SELECT {$fields}
+					FROM {$root_table}
+					{$joins}
+					{$where}
+					{$orders}";
+		echo str_replace("\n", "<br/>", "<p>" . $query . "</p>");
+		$results = $mysql->sql($query);
+
+		$compiled_data = self::compile_data($heirarchy_IDs, $results);
+		return $compiled_data;
+	}
+
+	static function compile_data (array $schema, SQLResult $results) {
+		$results = $results->flatten();
+		
+		$data = self::group_results($results, $schema);
+
+		return $data;
+	}
+
+	static function group_results (array $results, array $schema) {
+		global $SCHEMA;
+
+		// Pop the heirarchy table off of the schema 'stack'
+		$table = array_shift($schema);
+		$table['data'] = array();
+		$id_field = $table['id_alias'];
+		$label_field = $table['label_alias'];
+		unset($table['id_alias']);
+		unset($table['label_alias']);
+
+		$group = null;
+		$previous_value = null;
+		$data_index = -1;
+		foreach ($results AS $result) {
+			if (!$group || $result[$id_field] != $previous_value) {
+
+				if ($group && count($schema)) {
+					// NOTE: If to support multiple children, just append results from reflecsive calls to array two lines down
+					$children = self::group_results($group, $schema);
+					$table['data'][$data_index]['children'] = array($children);
+				}
+				$data_index++;
+
+				$group = array();
+				$previous_value = $result[$id_field];
+				$table['data'][$data_index] = array("id" => $result[$id_field], "label" => $result[$label_field]);
+			}
+
+			$group[] = $result;
+		}
+
+		if ($group && count($schema)) {
+			// NOTE: If to support multiple children, just append results from reflecsive calls to array two lines down
+			$children = self::group_results($group, $schema);
+			$table['data'][$data_index]['children'] = array($children);
+		}
+
+		return $table;
+	}
+
 	function get_complex_link_label_comparator ($link_table, $link_label, $prefix="") {
 		$link_label_options = array();
 		foreach ($link_label AS $link_attachment_value => $link_label_attached) {

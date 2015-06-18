@@ -1083,7 +1083,7 @@ $SCHEMA['subject_group'] = array(
 	"url_ID"	=> array("url_ID", RICH_URL_ID, "URL ID", OPTIONAL_HIDDEN, LINK_FIELD => "name"),
 	"image"	=> array("image", IMAGE, "Thumbnail Image", FIELD_GROUP => "Images"),
 	"svg_image"	=> array("svg_image", IMAGE, "Mobile Image", FIELD_GROUP => "Images"),
-	"subjects"	=> array("subjects", LINK_N_TO_N, "Subjects", LINK_TABLE => "subject", LINK_LABEL => "subject", LINK_OPTIONS => LINK_EXISTING_ONLY|LINK_EXPANDED),
+	"subjects"	=> array("subjects", LINK_ONE_TO_N, "Subjects", LINK_TABLE => "subject", LINK_LABEL => "subject", LINK_FIELD => "subject_group", LINK_OPTIONS => LINK_EXISTING_ONLY|LINK_EXPANDED),
 	/* "highlights"	=> array("highlights", COPY, "Know-It Bulletpoints", FIELD_NOTES => "(Separate points on new lines)"), */
 	"sort_order"	=> array("sort_order", NUMBER, "Sort Order", FIELD_DEFAULT => 999)
 );

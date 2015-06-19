@@ -195,7 +195,7 @@ class SchemaManager {
 					{$joins}
 					{$where}
 					{$orders}";
-		echo str_replace("\n", "<br/>", "<p>" . $query . "</p>");
+		// echo str_replace("\n", "<br/>", "<p>" . $query . "</p>");
 		$results = $mysql->sql($query);
 
 		$compiled_data = self::compile_data($heirarchy_IDs, $results);

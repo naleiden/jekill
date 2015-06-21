@@ -79,7 +79,7 @@ define("RECORD_ACCESS_FIELD",	27);	// Defines the field on this table that must 
 define("RECORD_ACCESS_USER_FIELD",	28);	// Defines the field on the 'user' table that must match the value of the specified field on this table
 define("RECORD_CREATION",	29);	// The user level that can create records of this table
 define("RECORD_DELETION",	30);	//          ""             delete       ""
-define("RECORD_LABEL",		31);
+define("RECORD_LABEL",		31);	// The field which holds the label for a record
 define("RECORD_WHERE",		32);	// Limit which types of records are displayed in preview rows
 define("DEFAULT_BROWSE_LAYOUT",	33);	// "row" if not specified. Change the default layout of a table's records when browsing.
 define("RECORD_BROWSE_FIELDS",	34);	// For supplying custom fields in the "row" layout type, ex: SUM(table_name.points). Comma delimited. MUST USE TABLE NAME IN FIELD REFERENCE. May need RECORD_GROUP_BY
@@ -289,56 +289,57 @@ define("LINK_SORT",		49);
 define("LINK_FIELD",		50);	// Defines link field that points TO the table (1 to N: implicit relationship)
 define("LINK_OPTIONS",		51);	// LINK_NEW_ONLY | LINK_EXISTING_ONLY | LINK_EXPANDED
 define("LINK_MAP_TABLE",	52);	// The table that holds the N to N map info.
-define("LINK_LOCAL_KEY",	53);	// The id for records of *this* type in the map table
-define("LINK_FOREIGN_KEY",	54);	// The id for record of the other type in the map table
-define("LINK_MINIMUM",		55);	// Minimum # of associations. Can be used to force a default association.
-define("LINK_MAXIMUM",		56);	// Maximum # of associations.
-define("LINK_ATTACHMENT",	57);	// If the LINK_TABLE depends on another field in this table. LINK_TABLE => array("" => "user", ...), LINK_LABEL => array("" => first_name, ...). Just for LINK now (Not LINK_N_TO_N, etc.)
-define("LINK_ADD_TEXT",		58);
+define("LINK_MAP_SORT",		53);
+define("LINK_LOCAL_KEY",	54);	// The id for records of *this* type in the map table
+define("LINK_FOREIGN_KEY",	55);	// The id for record of the other type in the map table
+define("LINK_MINIMUM",		56);	// Minimum # of associations. Can be used to force a default association.
+define("LINK_MAXIMUM",		57);	// Maximum # of associations.
+define("LINK_ATTACHMENT",	58);	// If the LINK_TABLE depends on another field in this table. LINK_TABLE => array("" => "user", ...), LINK_LABEL => array("" => first_name, ...). Just for LINK now (Not LINK_N_TO_N, etc.)
+define("LINK_ADD_TEXT",		59);
 
 // Files / Server File
-define("FILE_PATH",		59);	// Where to store a file, complete path with filename, omitting extension. <%field_name%> can be used to dynamically insert the value of a field.  Can be surrounded by 1 function call, e.g., strtolower(<%field_name%>)
-define("ROOT_DIRECTORY",	60);	// The folder that a SERVER_FILE browse starts off in
-define("EXPLORE_PARENT",	61);	// Whether to allow exploring to parent directories
+define("FILE_PATH",		60);	// Where to store a file, complete path with filename, omitting extension. <%field_name%> can be used to dynamically insert the value of a field.  Can be surrounded by 1 function call, e.g., strtolower(<%field_name%>)
+define("ROOT_DIRECTORY",	61);	// The folder that a SERVER_FILE browse starts off in
+define("EXPLORE_PARENT",	62);	// Whether to allow exploring to parent directories
 
 /* Field Attachment changes the visiblity of a given field in a form based on the value of another field. */
-define("FIELD_ATTACHMENT",	62);	// A field name in this table whose value changes the appearance of this field.
-define("FIELD_ATTACHMENT_VALUE",63);	// The value of the field specified FIELD_ATTACHMENT that makes this field visible
-define("FIELD_ATTACHMENT_OPERATOR",	64);
+define("FIELD_ATTACHMENT",	63);	// A field name in this table whose value changes the appearance of this field.
+define("FIELD_ATTACHMENT_VALUE",64);	// The value of the field specified FIELD_ATTACHMENT that makes this field visible
+define("FIELD_ATTACHMENT_OPERATOR",	65);
 
 /* Option Attachment changes the options provided in an ENUMERATION based on the value of another field. */
-define("OPTION_ATTACHMENT",	65);
-define("OPTION_ATTACHMENT_SOURCES",	66);	// An array of values to options
+define("OPTION_ATTACHMENT",	66);
+define("OPTION_ATTACHMENT_SOURCES",	67);	// An array of values to options
 
-define("FIELD_RELEVANCE",	67);	// Whether or not this field is relevant. TOP_LEVEL_ONLY or SUBRECORD_ONLY
-define("SUBTABLE_DEFAULT",	68);	// Default value for a subtable field. Specifies field of parent table to default to 
-define("SESSION_DEFAULT",	69);	// 
-define("SELECT_MULTIPLE",	70);	// ENUMERATION/LINK modifier - allow selection of multiple values;
-define("SELECT_SIZE",		71);    // The number of options to show. SELECT_MULTIPLE must be set.
-define("FIELD_GROUP",		72);	// Divide table up into multiple "grouped" forms.
+define("FIELD_RELEVANCE",	68);	// Whether or not this field is relevant. TOP_LEVEL_ONLY or SUBRECORD_ONLY
+define("SUBTABLE_DEFAULT",	69);	// Default value for a subtable field. Specifies field of parent table to default to 
+define("SESSION_DEFAULT",	70);	// 
+define("SELECT_MULTIPLE",	71);	// ENUMERATION/LINK modifier - allow selection of multiple values;
+define("SELECT_SIZE",		72);    // The number of options to show. SELECT_MULTIPLE must be set.
+define("FIELD_GROUP",		73);	// Divide table up into multiple "grouped" forms.
 
-define("FIELD_CHANGE",		73);
-define("FIELD_CLICK",		74);
-define("FIELD_DOUBLE_CLICK",	75);
-define("FIELD_FOCUS",		76);
+define("FIELD_CHANGE",		74);
+define("FIELD_CLICK",		75);
+define("FIELD_DOUBLE_CLICK",	76);
+define("FIELD_FOCUS",		77);
 
-define("FIELD_BLUR",		77);
-define("FIELD_MOUSEOVER",	78);
-define("FIELD_MOUSEOUT",	79);
-define("FIELD_KEYUP",		80);
+define("FIELD_BLUR",		78);
+define("FIELD_MOUSEOVER",	79);
+define("FIELD_MOUSEOUT",	80);
+define("FIELD_KEYUP",		81);
 
-define("FIELD_NO_CLEAR",	81);
-define("FIELD_NO_LABEL",	82);
+define("FIELD_NO_CLEAR",	82);
+define("FIELD_NO_LABEL",	83);
 
-define("ANNOTATION_RESIZABLE",	83);	// Whether or not an annotation can be resized
-define("ANNOTATION_WIDTH",	84);	// If numeric, the fixed width of this annotation. If a string, the field that should hold the width value
-define("ANNOTATION_HEIGHT",	85);	// "
-define("ANNOTATION_X",		86);	// "
-define("ANNOTATION_Y",		87);	// "
+define("ANNOTATION_RESIZABLE",	84);	// Whether or not an annotation can be resized
+define("ANNOTATION_WIDTH",	85);	// If numeric, the fixed width of this annotation. If a string, the field that should hold the width value
+define("ANNOTATION_HEIGHT",	86);	// "
+define("ANNOTATION_X",		87);	// "
+define("ANNOTATION_Y",		88);	// "
 
-define("STRENGTH_INDICATOR",	88);	// TODO: Provide a strength indicator for a password
-define("STRENGTH_REQUIREMENT",	89);	// TODO: Require a minimum strength for a password
-define("FIELD_NON_UNIQUE_CALLBACK", 90);	// The callback to invoke when a duplicate value is detected.
+define("STRENGTH_INDICATOR",	89);	// TODO: Provide a strength indicator for a password
+define("STRENGTH_REQUIREMENT",	90);	// TODO: Require a minimum strength for a password
+define("FIELD_NON_UNIQUE_CALLBACK", 91);	// The callback to invoke when a duplicate value is detected.
 
 define("FIELD_CLASS",		94);	// The HTML class to apply to the input
 define("FIELD_REQUIRED_INDICATOR", 95);	// '*' By default

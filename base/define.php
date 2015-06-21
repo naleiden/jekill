@@ -10,7 +10,7 @@ error_reporting(0);
 
 $DATABASE_NAME = "drawittoknowit";
 
-if ($_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
+if (true || $_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
 	$DATABASE_HOST = "localhost";
 	$DATABASE_USER = "root";
 	$DATABASE_PASSWORD = "";

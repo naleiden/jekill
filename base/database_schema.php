@@ -1041,6 +1041,7 @@ $SCHEMA['subject'] = array(
 	TABLE_PARENT => "curriculum",
 	TABLE_ACCESS => ADMINISTRATOR,
 	// RECORD_WHERE => "WHERE curriculum IS NOT NULL",
+	RECORD_LABEL => "subject",
 
 	"subject_group"		=> array("subject_group", LINK, "Subject", LINK_TABLE => "subject_group", LINK_LABEL => "name", SUBTABLE_DEFAULT => "subject_group_ID"),
 	"subject"		=> array("subject", SENTENCE, "Unit Name", REQUIRED),
@@ -1057,6 +1058,7 @@ $SCHEMA['curriculum'] = array(
 	TABLE_LABEL => "Courses",
 	TABLE_PARENT => "materials",
 	TABLE_ACCESS => ADMINISTRATOR,
+	RECORD_LABEL => "name",
 
 	// "division"	=> array("division", SET, "Division", REQUIRED, FIELD_OPTIONS => $DIVISIONS),
 	"name"	=> array("name", NAME, "Course Name", REQUIRED),
@@ -1071,6 +1073,8 @@ $SCHEMA['curriculum'] = array(
 $SCHEMA['subject_group'] = array(
 	TABLE_LABEL => "Subjects",
 	TABLE_PARENT => "curriculum",
+	RECORD_LABEL => "name",
+	TABLE_SORT => "sort_order",
 
 	//"division"	=> array("division", ENUMERATION, "Division", REQUIRED, FIELD_OPTIONS => $DIVISIONS),
 	"curriculum"	=> array("curriculum", LINK, "Course", REQUIRED, LINK_TABLE => "curriculum", LINK_LABEL => "name"),
@@ -1079,7 +1083,7 @@ $SCHEMA['subject_group'] = array(
 	"url_ID"	=> array("url_ID", RICH_URL_ID, "URL ID", OPTIONAL_HIDDEN, LINK_FIELD => "name"),
 	"image"	=> array("image", IMAGE, "Thumbnail Image", FIELD_GROUP => "Images"),
 	"svg_image"	=> array("svg_image", IMAGE, "Mobile Image", FIELD_GROUP => "Images"),
-	"subjects"	=> array("subjects", LINK_N_TO_N, "Subjects", LINK_TABLE => "subject", LINK_LABEL => "subject", LINK_OPTIONS => LINK_EXISTING_ONLY|LINK_EXPANDED),
+	"subjects"	=> array("subjects", LINK_ONE_TO_N, "Subjects", LINK_TABLE => "subject", LINK_LABEL => "subject", LINK_FIELD => "subject_group", LINK_OPTIONS => LINK_EXISTING_ONLY|LINK_EXPANDED),
 	/* "highlights"	=> array("highlights", COPY, "Know-It Bulletpoints", FIELD_NOTES => "(Separate points on new lines)"), */
 	"sort_order"	=> array("sort_order", NUMBER, "Sort Order", FIELD_DEFAULT => 999)
 );

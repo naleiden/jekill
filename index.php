@@ -13,6 +13,9 @@ $action = filter("/[a-z\-_]+/i", $_GET['action']);
 $order = intval($_POST['order']);
 
 header("Content-Type: application/json");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+header('Access-Control-Allow-Origin: *');
 
 $response = array();
 if ($action == "data") {

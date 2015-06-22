@@ -46,7 +46,7 @@ class SchemaManager {
 				$mysql->write_lock($map_table);
 				$existing = $mysql->count($map_table, "*", sprintf("WHERE {$parent_ID_field} = %d AND {$child_ID_field} = %d", $parent_ID, $child_ID));
 				$query = sprintf("INSERT INTO {$map_table} ({$parent_ID_field}, {$child_ID_field}) VALUES (%d, %d)", $parent_ID, $child_ID);
-				$mysql->query($query);
+				$created = $mysql->query($query);
 				$mysql->unlock();
 				break;
 			case LINK_ONE_TO_N:
@@ -58,9 +58,12 @@ class SchemaManager {
 							$parent_ID,
 							$child_ID
 						);
-				$mysql->query($query);
+				$created = $mysql->query($query);
 				break;
+			default:
+				throw new Exception("Unsupported relationship type: " . $field[FIELD_TYPE]);
 		}
+		return $created;
 	}
 
 	static function destroy_relationship ($parent_table, $parent_ID, $field_name, $child_ID) {
@@ -70,28 +73,31 @@ class SchemaManager {
 		$field = $TABLE[$field_name];
 		$child_table_name = $field[LINK_TABLE];
 		switch ($field[FIELD_TYPE]) {
-                        // TODO: Factor this with similar code in persist()
-                        case LINK_N_TO_N:
-                                list($map_table, $parent_ID_field, $child_ID_field) = self::get_map_table_details($parent_table, $field_name);
-                                // TODO: Maybe make this not have to be unique later, or use keys to ensure uniqueness.
-                                $mysql->write_lock($map_table);
-                                $query = sprintf("DELETE FROM {$map_table} WHERE {$parent_ID_field} = %d AND {$child_ID_field} = %d", $parent_ID, $child_ID);
-                                $mysql->query($query);
-                                $mysql->unlock();
-                                break;
-                        case LINK_ONE_TO_N:
-                                // The field in the child table that references the parent
-                                $reference_field = $field[LINK_FIELD];
-                                $child_table_ID_field = self::get_table_unique_identifier($child_table_name);
-                                $query = sprintf("UPDATE {$child_table_name} SET {$reference_field} = NULL
-                                                        WHERE {$child_table_ID_field} = %d AND {$reference_field} = %d",
-                                                        $child_ID,
-														$parent_ID
-                                                );
-                                $mysql->query($query);
-                                break;
-                }
+			// TODO: Factor this with similar code in persist()
+			case LINK_N_TO_N:
+				list($map_table, $parent_ID_field, $child_ID_field) = self::get_map_table_details($parent_table, $field_name);
+				// TODO: Maybe make this not have to be unique later, or use keys to ensure uniqueness.
+				$mysql->write_lock($map_table);
+				$query = sprintf("DELETE FROM {$map_table} WHERE {$parent_ID_field} = %d AND {$child_ID_field} = %d", $parent_ID, $child_ID);
+				$updated = $mysql->update($query);
+				$mysql->unlock();
+				break;
+			case LINK_ONE_TO_N:
+				// The field in the child table that references the parent
+				$reference_field = $field[LINK_FIELD];
+				$child_table_ID_field = self::get_table_unique_identifier($child_table_name);
+				$query = sprintf("UPDATE {$child_table_name} SET {$reference_field} = NULL
+											WHERE {$child_table_ID_field} = %d AND {$reference_field} = %d",
+											$child_ID,
+											$parent_ID
+								);
+				$updated = $mysql->update($query);
+				break;
+			default:
+				throw new Exception("Unsupported relationship type: " . $field[FIELD_TYPE]);
+		}
 
+		return $updated;
 	}
 
 	static function parse_data_schema ($schema) {

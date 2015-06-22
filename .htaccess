@@ -6,7 +6,7 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 
-RewriteRule ^([a-z0-9_\-]+)\/([0-9]+)\/([a-z0-9_\-]+)\/([0-9]+)\/(create|destroy|reorder) index.php?parent=$1&parent_ID=$2&field=$3&child_ID=$4&action=$5 [QSA]
+RewriteRule ^([a-z0-9_\-]+)\/([0-9]+)\/([a-z0-9_\-]+)\/([0-9]+)\/(create|data|destroy|reorder) index.php?parent=$1&parent_ID=$2&field=$3&child_ID=$4&action=$5 [QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f

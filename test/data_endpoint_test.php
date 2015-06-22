@@ -141,4 +141,11 @@ test($response_code, 304, "Destroy HTTP status for non-existing 1-to-N not as ex
 //$response = $post->execute();
 //echo $response;
 
+/* // Endpoint test for data.
+$get = new Curl(HOST . "/subject/249/lessons/918/data?schema=" . urlencode($schema));
+$response = $get->execute();
+echo $response;
+exit;
+*/
+
 ?>

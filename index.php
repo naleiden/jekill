@@ -1,5 +1,14 @@
 <?php
 
+// respond to preflights
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+  if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+		header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+		header('Access-Control-Allow-Origin: *');
+  }
+  exit;
+}
+
 require_once("base/schema_manager.php");
 
 $request_type = "ajax";

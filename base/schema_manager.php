@@ -144,7 +144,6 @@ class SchemaManager {
 			$orders[] = "{$root_table}.{$SCHEMA[$root_table][TABLE_SORT]}";
 		}
 		if ($schema[0]['where_field']) {
-			$where[] = "{$schema[0]['where_field']} = '{$schema[0]['where_value']}'";
 			$where[] = "{$root_table}.{$schema[0]['where_field']} = '{$schema[0]['where_value']}'";
 		}
 		$heirarchy_IDs[] = array("table" => $root_table, "id" => $root_table_ID_field, "id_alias" => $root_table_ID_field, "label" => $root_table_label, "label_alias" => $root_table_label);

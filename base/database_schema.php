@@ -1048,7 +1048,7 @@ $SCHEMA['subject'] = array(
 
 	// "chapter"		=> array("chapter", NAME, "Chapter Num.");
 	"visible"		=> array("visible", BOOL, "Visible"),
-	"lessons"		=> array("lessons", LINK_N_TO_N, "Tutorials", LINK_TABLE => "lesson", LINK_LABEL => "title", LINK_MAP_TABLE => "subject_lesson", LINK_LOCAL_KEY => "subject", LINK_FOREIGN_KEY => "lesson", LINK_OPTIONS => LINK_NO_FORM|LINK_EXPANDED|LINK_EXISTING_ONLY, LINK_SORT => "title", FIELD_GROUP => "Tutorials"),
+	"lessons"		=> array("lessons", LINK_N_TO_N, "Tutorials", LINK_TABLE => "lesson", LINK_LABEL => "title", LINK_MAP_TABLE => "subject_lesson", LINK_MAP_SORT => "sort_order", LINK_LOCAL_KEY => "subject", LINK_FOREIGN_KEY => "lesson", LINK_OPTIONS => LINK_NO_FORM|LINK_EXPANDED|LINK_EXISTING_ONLY, LINK_SORT => "title", FIELD_GROUP => "Tutorials"),
 	// "lesson"		=> array("lesson", LINK_ONE_TO_N, "Lesson", LINK_TABLE => "lesson", LINK_FIELD => "subject", LINK_LABEL => "title", LINK_OPTIONS => LINK_EXISTING_ONLY|LINK_EXPANDED, FIELD_GROUP => "Deprecated")
 );
 
@@ -1083,7 +1083,7 @@ $SCHEMA['subject_group'] = array(
 	"url_ID"	=> array("url_ID", RICH_URL_ID, "URL ID", OPTIONAL_HIDDEN, LINK_FIELD => "name"),
 	"image"	=> array("image", IMAGE, "Thumbnail Image", FIELD_GROUP => "Images"),
 	"svg_image"	=> array("svg_image", IMAGE, "Mobile Image", FIELD_GROUP => "Images"),
-	"subjects"	=> array("subjects", LINK_ONE_TO_N, "Subjects", LINK_TABLE => "subject", LINK_LABEL => "subject", LINK_FIELD => "subject_group", LINK_OPTIONS => LINK_EXISTING_ONLY|LINK_EXPANDED),
+	"subjects"	=> array("subjects", LINK_ONE_TO_N, "Subjects", LINK_TABLE => "subject", LINK_LABEL => "subject", LINK_FIELD => "subject_group", LINK_SORT => "", LINK_OPTIONS => LINK_EXISTING_ONLY|LINK_EXPANDED),
 	/* "highlights"	=> array("highlights", COPY, "Know-It Bulletpoints", FIELD_NOTES => "(Separate points on new lines)"), */
 	"sort_order"	=> array("sort_order", NUMBER, "Sort Order", FIELD_DEFAULT => 999)
 );
@@ -1091,9 +1091,11 @@ $SCHEMA['subject_group'] = array(
 $SCHEMA['subject_lesson'] = array(
 	TABLE_LABEL => "Tutorial Subjects",
 	TABLE_ACCESS => DIETY,
+	TABLE_SORT => "",
 
 	"lesson"	=> array("lesson", LINK, "Lesson", LINK_TABLE => "lesson", LINK_LABEL => "title"),
-	"subject"	=> array("subject", LINK, "Subject", LINK_TABLE => "subject", LINK_LABEL => "subject")
+	"subject"	=> array("subject", LINK, "Subject", LINK_TABLE => "subject", LINK_LABEL => "subject"),
+	"sort_order"	=> array("sort_order", NUMBER, "Sort Order", FIELD_DEFAULT => 999)
 );
 
 $SCHEMA['supplement'] = array(TABLE_LABEL => "Supplements", TABLE_ACCESS => ADMINISTRATOR);

@@ -142,6 +142,8 @@ class SchemaManager {
 		$fields[] = "{$root_table}.{$root_table_label}";
 		if ($SCHEMA[$root_table][TABLE_SORT]) {
 			$orders[] = "{$root_table}.{$SCHEMA[$root_table][TABLE_SORT]}";
+		} else {
+			$orders[] = "{$root_table}.{$root_table_ID_field}";
 		}
 		if ($schema[0]['where_field']) {
 			$where[] = "{$root_table}.{$schema[0]['where_field']} = '{$schema[0]['where_value']}'";
@@ -179,6 +181,8 @@ class SchemaManager {
 					$joins[] = "LEFT JOIN {$child_table} AS {$child_table_alias} ON ({$child_table_alias}.{$reference_field} = {$current_table}.{$current_table_ID_field})";
 					if ($order_field) {
 						$orders[] = "{$child_table_alias}.{$order_field}";
+					} else {
+						$orders[] = "{$child_table_alias}.{$child_table_ID_field}";
 					}
 					break;
 			}
@@ -201,7 +205,7 @@ class SchemaManager {
 					{$joins}
 					{$where}
 					{$orders}";
-		// echo str_replace("\n", "<br/>", "<p>" . $query . "</p>");
+		// echo str_replace("\n", "<br/>", "<p>" . $query . "</p>"); exit;
 		$results = $mysql->sql($query);
 
 		$compiled_data = self::compile_data($heirarchy_IDs, $results);

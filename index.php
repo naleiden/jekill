@@ -62,7 +62,15 @@ if ($action == "data") {
 				if (!$order) {
 					header('HTTP/1.1 400 Bad Request', true, 400);
 				} else {
-					SchemaManager::reorder($parent_table, $parent_ID, $field_name, $child_ID, $order);
+					// echo "$parent_table, $parent_ID, $field_name, $child_ID, $order";
+					$updated = SchemaManager::reorder_relationship($parent_table, $parent_ID, $field_name, $child_ID, $order);
+					if ($updated < 0) {
+						header('HTTP/1.1 304 Not Modified', true, 304);
+						$response['status'] = "failed";
+						$response['message'] = "Sorry, no sort parameter is defined for this field.";
+					} else if (!$updated) {
+						header('HTTP/1.1 304 Not Modified', true, 304);
+					}
 				}
 				break;
 			default:

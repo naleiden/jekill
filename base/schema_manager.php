@@ -100,6 +100,75 @@ class SchemaManager {
 		return $updated;
 	}
 
+	static function reorder_relationship ($parent_table, $parent_ID, $field_name, $child_ID, $order) {
+				global $SCHEMA, $mysql;
+
+		$TABLE = $SCHEMA[$parent_table];
+		$field = $TABLE[$field_name];
+		$child_table_name = $field[LINK_TABLE];
+		switch ($field[FIELD_TYPE]) {
+			case LINK_N_TO_N:
+				list($map_table, $parent_table_ID_field, $child_table_ID_field) = self::get_map_table_details($parent_table, $field_name);
+				if (!$field[LINK_MAP_TABLE]) {
+					$sort_field = "record_num";
+				} else if ($field[LINK_MAP_SORT]) {
+					$sort_field = $field[LINK_MAP_SORT];
+				}
+				if (!$sort_field) {
+					return -1;
+				}
+				$child_values = $mysql->get_associative($map_table, $child_table_ID_field, $sort_field, "WHERE {$parent_table_ID_field} = {$parent_ID} ORDER BY {$sort_field}");
+				$sortable_table = $map_table;
+				break;
+			case LINK_ONE_TO_N:
+				$child_table = $SCHEMA[$child_table_name];
+				$parent_table_ID_field = $field[LINK_FIELD];	// The field in the child table that references the parent
+				$sort_field = $field[LINK_SORT] ?: $child_table[TABLE_SORT];
+				if (!$sort_field) {
+					return -1;
+				}
+				$child_table_ID_field = self::get_table_unique_identifier($child_table_name);
+				$child_values = $mysql->get_associative($child_table_name, $child_table_ID_field, $sort_field, "WHERE {$parent_table_ID_field} = {$parent_ID} ORDER BY {$sort_field}");
+				$sortable_table = $child_table_name;
+				break;
+			default:
+				throw new Exception("Unsupported relationship type: " . $field[FIELD_TYPE]);
+		}
+
+		if (count($child_values) < $order) {
+			return -1;
+		}
+
+		// Remove the target reordered element.
+		unset($child_values[$child_ID]);
+		if ($order == 1) {
+			$child_values = array($child_ID => $order) + $child_values;
+		} else {
+			// Re-insert the 
+			$child_values = array_slice($child_values, 0, $order-1, true)
+	    					+ array($child_ID => $order)
+	    					+ array_slice($child_values, $order-1, count($child_values) - 1, true) ;
+		}
+		
+		$updated = self::update_record_order($sortable_table, $parent_table_ID_field, $parent_ID, $sort_field, $child_table_ID_field, $child_values);
+		
+		return $updated;
+	}
+
+	static function update_record_order ($table_name, $parent_field, $parent_ID, $sort_field, $child_field, array $child_IDs) {
+		global $mysql;
+
+		$query = "UPDATE {$table_name} SET {$sort_field} = CASE";
+		$i = 1;
+		foreach ($child_IDs AS $id => $old_order) {
+			$query .= "\nWHEN {$child_field} = {$id} THEN {$i}";
+			$i++;
+		}
+		$query .= "\nEND\nWHERE {$parent_field} = {$parent_ID}";
+// echo $query;
+		return $mysql->update($query);
+	}
+
 	static function parse_data_schema ($schema) {
 		$schema_parts = explode(",", $schema);
 		$schema = array();
